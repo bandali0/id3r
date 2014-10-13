@@ -5,11 +5,15 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.melnykov.fab.FloatingActionButton;
+
 import org.aminb.id3r.R;
 import org.aminb.id3r.fragment.MainFragment;
 
 
 public class MainActivity extends Activity {
+
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +24,9 @@ public class MainActivity extends Activity {
                     .add(R.id.container, new MainFragment())
                     .commit();
         }
+
+        fab = (FloatingActionButton) findViewById(R.id.btn_save);
+        fab.hide(false);
     }
 
 
@@ -43,6 +50,14 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showFAB() {
+        fab.show();
+    }
+
+    public void hideFAB() {
+        fab.hide();
     }
 
 }
