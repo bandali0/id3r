@@ -16,14 +16,22 @@ import org.aminb.id3r.R;
 
 import java.io.IOException;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class MainFragment extends Fragment {
-    
+
     public MainFragment() {}
+
+    @InjectView(R.id.id_title)  FloatLabeledEditText title;
+    @InjectView(R.id.id_artist) FloatLabeledEditText artist;
+    @InjectView(R.id.id_album)  FloatLabeledEditText album;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        ButterKnife.inject(this, rootView);
 
         Mp3File file = null;
         try {
@@ -43,16 +51,16 @@ public class MainFragment extends Fragment {
             if (file.hasId3v2Tag()) {
                 ID3v2 tags = file.getId3v2Tag();
                 if (tags.getTitle() != null)
-                    ((FloatLabeledEditText)rootView.findViewById(R.id.id_title)).setText(tags.getTitle());
+                    title.setText(tags.getTitle());
                 if (tags.getArtist() != null)
-                    ((FloatLabeledEditText)rootView.findViewById(R.id.id_artist)).setText(tags.getArtist());
+                    artist.setText(tags.getArtist());
                 if (tags.getAlbum() != null)
-                    ((FloatLabeledEditText)rootView.findViewById(R.id.id_album)).setText(tags.getAlbum());
+                    album.setText(tags.getAlbum());
 
                 // hack to make hints show up
-                ((FloatLabeledEditText)rootView.findViewById(R.id.id_artist)).requestFieldFocus();
-                ((FloatLabeledEditText)rootView.findViewById(R.id.id_album)).requestFieldFocus();
-                ((FloatLabeledEditText)rootView.findViewById(R.id.id_title)).requestFieldFocus();
+                artist.requestFieldFocus();
+                album.requestFieldFocus();
+                title.requestFieldFocus();
             }
         }
 

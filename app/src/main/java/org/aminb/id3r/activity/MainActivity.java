@@ -5,8 +5,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.melnykov.fab.FloatingActionButton;
+
 import org.aminb.id3r.R;
 import org.aminb.id3r.fragment.MainFragment;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class MainActivity extends Activity {
@@ -15,6 +20,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ButterKnife.inject(this);
+
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new MainFragment())
@@ -43,6 +51,11 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.btn_save)
+    public void btnSave () {
+        // TODO: save changes
     }
 
 }
