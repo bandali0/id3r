@@ -23,4 +23,5 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile files('libs/mp3agic-0.8.2.jar')
     compile 'com.wrapp.floatlabelededittext:library:0.0.3'
+    compile 'com.melnykov:floatingactionbutton:1.0.4'
 }

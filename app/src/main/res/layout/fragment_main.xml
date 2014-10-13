@@ -40,4 +40,5 @@
         float:fletFloatingHint="@string/album"
         float:fletInputType="textCapWords"/>
 
+
 </LinearLayout>
