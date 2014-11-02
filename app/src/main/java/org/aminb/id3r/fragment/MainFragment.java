@@ -59,6 +59,7 @@ public class MainFragment extends Fragment {
                     album.setText(tags.getAlbum());
 
                 // hack to make hints show up
+                title.requestFieldFocus();
                 artist.requestFieldFocus();
                 album.requestFieldFocus();
                 title.requestFieldFocus();
