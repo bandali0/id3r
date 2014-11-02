@@ -1,6 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -16,15 +15,10 @@
         tools:context=".activity.MainActivity"
         tools:ignore="MergeRootFrame" >
 
-        <com.melnykov.fab.FloatingActionButton
+        <include
             android:id="@+id/btn_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_save"
-            fab:fab_colorNormal="#e91e63"
-            fab:fab_colorPressed="#d81b60"/>
+            layout="@layout/fab" />
+
     </FrameLayout>
 
 </RelativeLayout>

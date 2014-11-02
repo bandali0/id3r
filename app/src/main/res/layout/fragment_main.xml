@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:id="@+id/id_title"
-        float:fletImeOptions="actionPrevious"
+        float:fletImeOptions="actionNext"
         float:fletSingleLine="true"
         float:fletFloatingHint="@string/title"
         float:fletInputType="textCapWords"/>
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:id="@+id/id_artist"
-        float:fletImeOptions="actionPrevious"
+        float:fletImeOptions="actionNext"
         float:fletSingleLine="true"
         float:fletFloatingHint="@string/artist"
         float:fletInputType="textCapWords"/>
