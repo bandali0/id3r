@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.NotSupportedException;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import com.wrapp.floatlabelededittext.FloatLabeledEditText;
 
@@ -22,6 +23,7 @@ import java.io.IOException;
 public class MainFragment extends Fragment {
 
     private FloatLabeledEditText title, artist, album;
+    private Mp3File mp3File;
     
     public MainFragment() {}
 
@@ -34,9 +36,8 @@ public class MainFragment extends Fragment {
         artist = (FloatLabeledEditText) rootView.findViewById(R.id.id_artist);
         album = (FloatLabeledEditText) rootView.findViewById(R.id.id_album);
 
-        Mp3File file = null;
         try {
-            file = new Mp3File(getActivity().getIntent().getData().getPath());
+            mp3File = new Mp3File(getActivity().getIntent().getData().getPath());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (UnsupportedTagException e) {
@@ -48,9 +49,9 @@ public class MainFragment extends Fragment {
             // TODO: placeholder layout
         }
 
-        if (file != null) {
-            if (file.hasId3v2Tag()) {
-                ID3v2 tags = file.getId3v2Tag();
+        if (mp3File != null) {
+            if (mp3File.hasId3v2Tag()) {
+                ID3v2 tags = mp3File.getId3v2Tag();
                 if (tags.getTitle() != null)
                     title.setText(tags.getTitle());
                 if (tags.getArtist() != null)
@@ -67,6 +68,25 @@ public class MainFragment extends Fragment {
         }
 
         setTextChangedListeners();
+
+        ((MainActivity)getActivity()).setFABListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ID3v2 tags = mp3File.getId3v2Tag();
+                tags.setTitle(title.getTextString());
+                tags.setArtist(artist.getTextString());
+                tags.setAlbum(album.getTextString());
+                mp3File.setId3v2Tag(tags);
+                try {
+                    String name = getActivity().getIntent().getData().getPath();
+                    mp3File.save(name.substring(0,name.length()-4)+"wtags.mp3");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (NotSupportedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         return rootView;
     }

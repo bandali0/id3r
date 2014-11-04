@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.melnykov.fab.FloatingActionButton;
 
@@ -62,6 +63,10 @@ public class MainActivity extends ActionBarActivity {
 
     public void hideFAB() {
         fab.hide();
+    }
+
+    public void setFABListener (View.OnClickListener listener) {
+        fab.setOnClickListener(listener);
     }
 
 }
