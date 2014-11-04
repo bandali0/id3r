@@ -1,5 +1,6 @@
 package org.aminb.id3r.fragment;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.Editable;
@@ -23,72 +24,84 @@ import java.io.IOException;
 public class MainFragment extends Fragment {
 
     private FloatLabeledEditText title, artist, album;
+    private boolean normalMode = false;
     private Mp3File mp3File;
     
     public MainFragment() {}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        title = (FloatLabeledEditText) rootView.findViewById(R.id.id_title);
-        artist = (FloatLabeledEditText) rootView.findViewById(R.id.id_artist);
-        album = (FloatLabeledEditText) rootView.findViewById(R.id.id_album);
+        if (normalMode) {
 
-        try {
-            mp3File = new Mp3File(getActivity().getIntent().getData().getPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (UnsupportedTagException e) {
-            e.printStackTrace();
-        } catch (InvalidDataException e) {
-            e.printStackTrace();
-        }
-        catch (NullPointerException e) {
-            // TODO: placeholder layout
-        }
+            title = (FloatLabeledEditText) view.findViewById(R.id.id_title);
+            artist = (FloatLabeledEditText) view.findViewById(R.id.id_artist);
+            album = (FloatLabeledEditText) view.findViewById(R.id.id_album);
 
-        if (mp3File != null) {
-            if (mp3File.hasId3v2Tag()) {
-                ID3v2 tags = mp3File.getId3v2Tag();
-                if (tags.getTitle() != null)
-                    title.setText(tags.getTitle());
-                if (tags.getArtist() != null)
-                    artist.setText(tags.getArtist());
-                if (tags.getAlbum() != null)
-                    album.setText(tags.getAlbum());
+            setTextChangedListeners();
 
-                // hack to make hints show up
-                title.requestFieldFocus();
-                artist.requestFieldFocus();
-                album.requestFieldFocus();
-                title.requestFieldFocus();
+            ((MainActivity)getActivity()).setFABListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ID3v2 tags = mp3File.getId3v2Tag();
+                    tags.setTitle(title.getTextString());
+                    tags.setArtist(artist.getTextString());
+                    tags.setAlbum(album.getTextString());
+                    mp3File.setId3v2Tag(tags);
+                    try {
+                        String name = getActivity().getIntent().getData().getPath();
+                        mp3File.save(name.substring(0,name.length()-4)+"wtags.mp3");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (NotSupportedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+
+            try {
+                mp3File = new Mp3File(getActivity().getIntent().getData().getPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (UnsupportedTagException e) {
+                e.printStackTrace();
+            } catch (InvalidDataException e) {
+                e.printStackTrace();
             }
-        }
 
-        setTextChangedListeners();
+            if (mp3File != null) {
+                if (mp3File.hasId3v2Tag()) {
+                    ID3v2 tags = mp3File.getId3v2Tag();
+                    if (tags.getTitle() != null)
+                        title.setText(tags.getTitle());
+                    if (tags.getArtist() != null)
+                        artist.setText(tags.getArtist());
+                    if (tags.getAlbum() != null)
+                        album.setText(tags.getAlbum());
 
-        ((MainActivity)getActivity()).setFABListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ID3v2 tags = mp3File.getId3v2Tag();
-                tags.setTitle(title.getTextString());
-                tags.setArtist(artist.getTextString());
-                tags.setAlbum(album.getTextString());
-                mp3File.setId3v2Tag(tags);
-                try {
-                    String name = getActivity().getIntent().getData().getPath();
-                    mp3File.save(name.substring(0,name.length()-4)+"wtags.mp3");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (NotSupportedException e) {
-                    e.printStackTrace();
+                    // hack to make hints show up
+                    title.requestFieldFocus();
+                    artist.requestFieldFocus();
+                    album.requestFieldFocus();
+                    title.requestFieldFocus();
                 }
             }
-        });
 
-        return rootView;
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+
+        if (getActivity().getIntent().getData() == null) // if opened from launcher
+            return inflater.inflate(R.layout.fragment_placeholder, container, false);
+        else { // if opened from 'share' menu, to open a file
+            normalMode = true;
+            return inflater.inflate(R.layout.fragment_main, container, false);
+        }
     }
 
     private TextWatcher onTextChanged = new TextWatcher() {
