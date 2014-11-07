@@ -8,24 +8,22 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.mpatric.mp3agic.ID3v2;
-import com.mpatric.mp3agic.InvalidDataException;
-import com.mpatric.mp3agic.Mp3File;
-import com.mpatric.mp3agic.NotSupportedException;
-import com.mpatric.mp3agic.UnsupportedTagException;
 import com.wrapp.floatlabelededittext.FloatLabeledEditText;
 
 import org.aminb.id3r.R;
 import org.aminb.id3r.activity.MainActivity;
+import org.aminb.id3r.util.File;
 
-import java.io.IOException;
 
 public class MainFragment extends Fragment {
 
     private FloatLabeledEditText title, artist, album;
     private boolean normalMode = false;
-    private Mp3File mp3File;
+    private File file;
+    private ID3v2 tags;
     
     public MainFragment() {}
 
@@ -44,49 +42,33 @@ public class MainFragment extends Fragment {
             ((MainActivity)getActivity()).setFABListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ID3v2 tags = mp3File.getId3v2Tag();
                     tags.setTitle(title.getTextString());
                     tags.setArtist(artist.getTextString());
                     tags.setAlbum(album.getTextString());
-                    mp3File.setId3v2Tag(tags);
-                    try {
-                        String name = getActivity().getIntent().getData().getPath();
-                        mp3File.save(name.substring(0,name.length()-4)+"wtags.mp3");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (NotSupportedException e) {
-                        e.printStackTrace();
-                    }
+                    file.setTags(tags);
+                    if (file.save())
+                        Toast.makeText(getActivity(), "Save Successful :)", Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(getActivity(), "Save Unsuccessful :(", Toast.LENGTH_SHORT).show();
                 }
             });
 
+            file = new File(getActivity().getIntent().getData().getPath());
+            tags = file.getTags();
 
-            try {
-                mp3File = new Mp3File(getActivity().getIntent().getData().getPath());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (UnsupportedTagException e) {
-                e.printStackTrace();
-            } catch (InvalidDataException e) {
-                e.printStackTrace();
-            }
+            if (tags != null) {
+                if (tags.getTitle() != null)
+                    title.setText(tags.getTitle());
+                if (tags.getArtist() != null)
+                    artist.setText(tags.getArtist());
+                if (tags.getAlbum() != null)
+                    album.setText(tags.getAlbum());
 
-            if (mp3File != null) {
-                if (mp3File.hasId3v2Tag()) {
-                    ID3v2 tags = mp3File.getId3v2Tag();
-                    if (tags.getTitle() != null)
-                        title.setText(tags.getTitle());
-                    if (tags.getArtist() != null)
-                        artist.setText(tags.getArtist());
-                    if (tags.getAlbum() != null)
-                        album.setText(tags.getAlbum());
-
-                    // hack to make hints show up
-                    title.requestFieldFocus();
-                    artist.requestFieldFocus();
-                    album.requestFieldFocus();
-                    title.requestFieldFocus();
-                }
+                // hack to make hints show up
+                title.requestFieldFocus();
+                artist.requestFieldFocus();
+                album.requestFieldFocus();
+                title.requestFieldFocus();
             }
 
         }
