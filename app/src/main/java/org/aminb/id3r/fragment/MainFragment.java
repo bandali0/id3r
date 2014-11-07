@@ -46,7 +46,7 @@ public class MainFragment extends Fragment {
                     tags.setArtist(artist.getTextString());
                     tags.setAlbum(album.getTextString());
                     file.setTags(tags);
-                    if (file.save())
+                    if (file.save(getActivity()))
                         Toast.makeText(getActivity(), "Save Successful :)", Toast.LENGTH_SHORT).show();
                     else
                         Toast.makeText(getActivity(), "Save Unsuccessful :(", Toast.LENGTH_SHORT).show();

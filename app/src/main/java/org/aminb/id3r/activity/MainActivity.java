@@ -16,6 +16,7 @@ import org.aminb.id3r.fragment.MainFragment;
 public class MainActivity extends ActionBarActivity {
 
     private FloatingActionButton fab;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,7 @@ public class MainActivity extends ActionBarActivity {
 
         fab = (FloatingActionButton) findViewById(R.id.btn_save);
         fab.hide(false);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
     }
@@ -63,6 +64,13 @@ public class MainActivity extends ActionBarActivity {
 
     public void hideFAB() {
         fab.hide();
+    }
+
+    public void setToolbarProgress (boolean enabled) {
+        if (enabled)
+            toolbar.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+        else
+            toolbar.findViewById(R.id.progress).setVisibility(View.GONE);
     }
 
     public void setFABListener (View.OnClickListener listener) {

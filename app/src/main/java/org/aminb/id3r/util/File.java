@@ -1,5 +1,6 @@
 package org.aminb.id3r.util;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import com.mpatric.mp3agic.ID3v2;
@@ -7,6 +8,8 @@ import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.NotSupportedException;
 import com.mpatric.mp3agic.UnsupportedTagException;
+
+import org.aminb.id3r.activity.MainActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,6 +45,25 @@ public class File {
     }
 
     class SaveFile extends AsyncTask<Mp3File, Void, Boolean> {
+
+        Context context;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            ((MainActivity)context).setToolbarProgress(true);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            ((MainActivity)context).setToolbarProgress(false);
+        }
+
+        public SaveFile(Context context) {
+            super();
+            this.context = context;
+        }
 
         @Override
         protected Boolean doInBackground(Mp3File... mp3Files) {
@@ -85,9 +107,9 @@ public class File {
         file.setId3v2Tag(tags);
     }
 
-    public boolean save() {
+    public boolean save(Context context) {
         try {
-            return new SaveFile().execute(file).get();
+            return new SaveFile(context).execute(file).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
