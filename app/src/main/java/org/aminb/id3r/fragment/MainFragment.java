@@ -59,7 +59,7 @@ public class MainFragment extends Fragment {
                                     ((MainActivity) getActivity()).setToolbarProgress(true);
                                 }
                             });
-                            if (file.save(getActivity()))
+                            if (file.save())
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
