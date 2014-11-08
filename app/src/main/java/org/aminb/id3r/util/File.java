@@ -48,18 +48,6 @@ public class File {
 
         Context context;
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            ((MainActivity)context).setToolbarProgress(true);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            super.onPostExecute(aBoolean);
-            ((MainActivity)context).setToolbarProgress(false);
-        }
-
         public SaveFile(Context context) {
             super();
             this.context = context;

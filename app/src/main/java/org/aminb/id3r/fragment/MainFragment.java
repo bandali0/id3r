@@ -31,11 +31,15 @@ public class MainFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (normalMode) {
+        title = (FloatLabeledEditText) view.findViewById(R.id.id_title);
+        artist = (FloatLabeledEditText) view.findViewById(R.id.id_artist);
+        album = (FloatLabeledEditText) view.findViewById(R.id.id_album);
 
-            title = (FloatLabeledEditText) view.findViewById(R.id.id_title);
-            artist = (FloatLabeledEditText) view.findViewById(R.id.id_artist);
-            album = (FloatLabeledEditText) view.findViewById(R.id.id_album);
+        init();
+    }
+
+    private void init() {
+        if (normalMode) {
 
             setTextChangedListeners();
 
@@ -46,30 +50,79 @@ public class MainFragment extends Fragment {
                     tags.setArtist(artist.getTextString());
                     tags.setAlbum(album.getTextString());
                     file.setTags(tags);
-                    if (file.save(getActivity()))
-                        Toast.makeText(getActivity(), "Save Successful :)", Toast.LENGTH_SHORT).show();
-                    else
-                        Toast.makeText(getActivity(), "Save Unsuccessful :(", Toast.LENGTH_SHORT).show();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ((MainActivity) getActivity()).setToolbarProgress(true);
+                                }
+                            });
+                            if (file.save(getActivity()))
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getActivity(), "Save Successful :)", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            else
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getActivity(), "Save Unsuccessful :(", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ((MainActivity)getActivity()).setToolbarProgress(false);
+                                }
+                            });
+                        }
+                    }).start();
+
                 }
             });
 
             file = new File(getActivity().getIntent().getData().getPath());
-            tags = file.getTags();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ((MainActivity) getActivity()).setToolbarProgress(true);
+                                }
+                            });
+                    tags = file.getTags();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (tags != null) {
+                                if (tags.getTitle() != null)
+                                    title.setText(tags.getTitle());
+                                if (tags.getArtist() != null)
+                                    artist.setText(tags.getArtist());
+                                if (tags.getAlbum() != null)
+                                    album.setText(tags.getAlbum());
 
-            if (tags != null) {
-                if (tags.getTitle() != null)
-                    title.setText(tags.getTitle());
-                if (tags.getArtist() != null)
-                    artist.setText(tags.getArtist());
-                if (tags.getAlbum() != null)
-                    album.setText(tags.getAlbum());
-
-                // hack to make hints show up
-                title.requestFieldFocus();
-                artist.requestFieldFocus();
-                album.requestFieldFocus();
-                title.requestFieldFocus();
-            }
+                                // hack to make hints show up
+                                title.requestFieldFocus();
+                                artist.requestFieldFocus();
+                                album.requestFieldFocus();
+                                title.requestFieldFocus();
+                            }
+                        }
+                    });
+                    getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ((MainActivity) getActivity()).setToolbarProgress(false);
+                                }
+                            });
+                }
+            }).start();
 
         }
     }
