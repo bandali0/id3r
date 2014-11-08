@@ -8,6 +8,9 @@
     <string name="artist">Artist</string>
     <string name="album">Album</string>
 
+    <string name="tag_success">Tags successfully written</string>
+    <string name="tag_fail">Failed to write the tags</string>
+
     <string name="placeholder">Placeholder</string>
 
 </resources>

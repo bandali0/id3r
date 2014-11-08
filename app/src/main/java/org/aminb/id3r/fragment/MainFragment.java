@@ -63,14 +63,14 @@ public class MainFragment extends Fragment {
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(getActivity(), "Save Successful :)", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), getString(R.string.tag_success), Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             else
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(getActivity(), "Save Unsuccessful :(", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), getString(R.string.tag_fail), Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             getActivity().runOnUiThread(new Runnable() {
