@@ -19,10 +19,13 @@
         <a href=\'https://google.com/+AminBandali\'>Google+</a>&nbsp;&nbsp;
         <a href=\'https://twitter.com/aminban\'>Twitter</a>
     ]]></string>
-    <string name="app_name_and_version" translatable="false"><![CDATA[
+    <string name="app_name_and_version"><![CDATA[
         <b>ID3r</b>&nbsp;<font color="#888888">v%1$s</font>
     ]]></string>
 
-    <string name="placeholder">Placeholder</string>
-
+    <string name="welcome">Welcome</string>
+    <string name="welcome_intro"><![CDATA[
+        <b>ID3r</b> is a tag editor for your MP3 files, created with simplicity and aesthetics
+        in mind.<br/><br />To edit tags, use your file manager of choice (such as Cabinet) and
+        select ID3r when opening the MP3 file, as shown in the following screen shot:]]></string>
 </resources>

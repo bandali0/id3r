@@ -4,10 +4,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mpatric.mp3agic.ID3v2;
@@ -131,8 +133,11 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
-        if (getActivity().getIntent().getData() == null) // if opened from launcher
-            return inflater.inflate(R.layout.fragment_placeholder, container, false);
+        if (getActivity().getIntent().getData() == null) { // if opened from launcher
+            View view = inflater.inflate(R.layout.fragment_welcome, container, false);
+            ((TextView)view.findViewById(R.id.welcome)).setText(Html.fromHtml(getString(R.string.welcome_intro)));
+            return view;
+        }
         else { // if opened from 'share' menu, to open a file
             normalMode = true;
             return inflater.inflate(R.layout.fragment_main, container, false);
