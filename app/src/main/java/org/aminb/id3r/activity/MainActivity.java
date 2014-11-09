@@ -10,13 +10,15 @@ import android.view.View;
 import com.melnykov.fab.FloatingActionButton;
 
 import org.aminb.id3r.R;
+import org.aminb.id3r.fragment.AboutDialog;
 import org.aminb.id3r.fragment.MainFragment;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements AboutDialog.DismissListener {
 
     private FloatingActionButton fab;
     Toolbar toolbar;
+    private static boolean aboutDialogShown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,10 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_about) {
+            if (aboutDialogShown) return false;
+            aboutDialogShown = true; // double clicking without this causes the dialog to be shown twice
+            new AboutDialog().show(getSupportFragmentManager(), "ABOUT");
             return true;
         }
 
@@ -77,4 +82,8 @@ public class MainActivity extends ActionBarActivity {
         fab.setOnClickListener(listener);
     }
 
+    @Override
+    public void onDismiss() {
+        aboutDialogShown = false;
+    }
 }

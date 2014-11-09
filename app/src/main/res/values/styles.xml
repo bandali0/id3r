@@ -6,7 +6,8 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
-        <item name="colorControlHighlight">@color/accent_transparent</item>
+        <item name="colorControlHighlight">@color/ripple</item>
+        <item name="body_text">#303030</item>
 
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>

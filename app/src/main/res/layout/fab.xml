@@ -8,7 +8,7 @@
     android:layout_gravity="bottom|end"
     android:layout_margin="16dp"
     android:src="@drawable/ic_save"
-    fab:fab_colorNormal="@color/fab_normal"
-    fab:fab_colorPressed="@color/fab_pressed"
+    fab:fab_colorNormal="@color/accent"
+    fab:fab_colorPressed="@color/accent_darker"
     fab:fab_colorRipple="@color/ripple"
     />
