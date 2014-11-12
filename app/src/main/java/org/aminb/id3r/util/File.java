@@ -19,6 +19,7 @@
 package org.aminb.id3r.util;
 
 import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.ID3v24Tag;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.NotSupportedException;
@@ -47,7 +48,14 @@ public class File {
         }
         this.file = file;
         if (file != null) {
-            return file.getId3v2Tag();
+            if (file.hasId3v2Tag())
+                return file.getId3v2Tag();
+            else if (file.hasId3v1Tag()) {
+                // TODO: alert the user that ID3v1 is not supported
+                return null;
+            }
+            else
+                return new ID3v24Tag();
         }
         return null;
     }
